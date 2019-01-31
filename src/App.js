@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './zonky.png';
 import './App.css';
+import Connector from './Connector';
 
 class App extends Component {
   render() {
@@ -19,7 +20,11 @@ class App extends Component {
           >
             Learn React
           </a>
+          <Connector />
         </header>
+        
+        
+        
       </div>
     );
   }

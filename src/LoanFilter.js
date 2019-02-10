@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import $ from 'jquery'; 
 
-function $(id){
+/*function $(id){
     return document.getElementById(id);
-}
+}*/
+
 
 class LoanFilter extends Component{
     constructor(props){
@@ -12,35 +14,70 @@ class LoanFilter extends Component{
             host:"https://api.zonky.cz",
             ratings:['AAAAA','AAAA','AAA','AA','A','B','C','D'],
             selectedRating:"",
-            active: "btnActived"
+            debug:true,
+            url:"",
+            data: null,
+            rating:""
         }
-        this.countLoanAvg = this.countLoanAvg.bind(this);
+        this.filterOn = this.filterOn.bind(this);
     }
-    setActiveTab(e,selectedRating) {
-        
-    }
-
-    countLoanAvg(e,item) {
+    filterOn(e,item){
         this.state.ratings.forEach(element => { //clear style from filter buttons
-            $(element).className="button";
+            $("#"+element).className="button";
         });
-        $(item).className = 'button btnActived'; //change style on actived button
+        $("#"+item).className = 'button btnActived'; //change style on actived button
         
         var ratingFilter="rating__eq="+item;  //make filter
-        var url= this.state.host+"/loans/marketplace?"+ratingFilter;
-        $("loanAvgResult").innerHTML=url; //show active filter button
+        this.setState((state, props) => {
+            return {
+                url: this.state.host+"/loans/marketplace?"+ratingFilter,
+            }
+        }); //set 
+        this.state.url=this.state.host+"/loans/marketplace?"+ratingFilter;
+        this.state.rating=item;
+        //var average= countLoanAvg(json);
+        $("#loanAvgResult").innerHTML=this.countLoanAvg(item);
+        if(this.state.debug===true){
+            $("#debbuger").innerHTML="URL api zonky: <a href='"+this.state.url+"' target='_blank'>"+this.state.url+"</a>"; //show active filter button
+        }
+        
+    }
+    componentDidMount(item){
+        let rating=this.state.rating;
+        //var url='https://api.zonky.cz/loans/marketplace?fields=id,amount,rating&rating__eq=A'; //request pattern
+        var url='api/loans/marketplace_rating__eq='+item+'.json';
+        if (typeof rating !== 'undefined' && rating !== null && rating !=="") {
+            $.getJSON(url, function(data) {
+                console.log(data);
+            });
+        } 
+    }
+    getJsonData(item){
+        this.componentDidMount(item);
+    }
+    //Count average of array
+    countLoanAvg(item) {
+        var sum, avg = 0;
+        var jsonFile=this.getJsonData(item);
+        
+        console.log(jsonFile);
+        var arr=[1,43,5];
+        // dividing by 0 will return Infinity
+        // arr must contain at least 1 element to use reduce
+        if (arr.length)
+        {
+            sum = arr.reduce(function(a, b) { return a + b; });
+            avg = Math.floor(sum / arr.length);
+        }
+        return avg
     }
 
-    handleClick = (e, data) => {
-        // access to e.target here
-        console.log(data);
-    }
     render() {
         return(
             <div>
-                <ul class="filter">
+                <ul className="filter">
                     {this.state.ratings.map(item => (
-                        <li id={item} key={item} class="button {{this.state.active}}" onClick={((e) => this.countLoanAvg(e,item))}>{item}</li>
+                        <li id={item} key={item} className="button" onClick={((e) => this.filterOn(e,item))}>{item}</li>
                     ))}
                </ul>
             

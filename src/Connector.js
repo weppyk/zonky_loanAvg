@@ -41,7 +41,7 @@ var getJSON = function(url, callback) {
 };
 
 //getJSON('http://time.jsontest.com',  function(err, data) {
-getJSON('https://zonkycors.herokuapp.com/',  function(err, data) {
+/*getJSON('https://zonkycors.herokuapp.com/',  function(err, data) {
            
     if (err != null) {
         console.error(err);
@@ -53,7 +53,7 @@ Unix time: ${data.milliseconds_since_epoch}`
     
         console.log(text);
     }
-});
+});*/
 
 /*
 $.ajax({

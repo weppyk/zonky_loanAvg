@@ -23,22 +23,23 @@ class LoanFilter extends Component{
     }
     filterOn(e,item){
         this.state.ratings.forEach(element => { //clear style from filter buttons
-            $("#"+element).className="button";
+            $("#"+element).removeClass("button btnActived").addClass('button');
         });
-        $("#"+item).className = 'button btnActived'; //change style on actived button
+        $("#"+item).removeClass('button').addClass("button btnActived"); //change style on actived button
         
         var ratingFilter="rating__eq="+item;  //make filter
         this.setState((state, props) => {
             return {
                 url: this.state.host+"/loans/marketplace?"+ratingFilter,
+                rating:item
             }
         }); //set 
-        this.state.url=this.state.host+"/loans/marketplace?"+ratingFilter;
-        this.state.rating=item;
+        //this.state.url=this.state.host+"/loans/marketplace?"+ratingFilter;
+        //this.state.rating=item;
         //var average= countLoanAvg(json);
-        $("#loanAvgResult").innerHTML=this.countLoanAvg(item);
+        $("#loanAvgResult").html(this.countLoanAvg(item));
         if(this.state.debug===true){
-            $("#debbuger").innerHTML="URL api zonky: <a href='"+this.state.url+"' target='_blank'>"+this.state.url+"</a>"; //show active filter button
+            $("#debbuger").html("URL api zonky: <a href='"+this.state.url+"' target='_blank'>"+this.state.url+"</a>"); //show active filter button
         }
         
     }
@@ -57,7 +58,7 @@ class LoanFilter extends Component{
     }
     //Count average of array
     countLoanAvg(item) {
-        var sum, avg = 0;
+        let sum, avg = 0;
         var jsonFile=this.getJsonData(item);
         
         console.log(jsonFile);

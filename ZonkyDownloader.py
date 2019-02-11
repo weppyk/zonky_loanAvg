@@ -1,7 +1,7 @@
 import requests,json,time
 
 class ZonkyDownloader:
-    def __init__(self,url="https://api.zonky.cz/loans/marketplace?fields=id,amount&rating&rating__eq=A"):
+    def __init__(self,url="https://api.zonky.cz/loans/marketplace?fields=id,amount,rating&rating__eq="):
         self.ratings=['AAAAA','AAAA','AAA','AA','A','B','C','D']
         self.url=url
         self.headers= {
@@ -13,14 +13,14 @@ class ZonkyDownloader:
         self.starttime= starttime=time.time()
 
     #return json object from url
-    def getMarketplace(self):
-        r=requests.get(self.url,headers=self.headers)        
+    def getMarketplace(self,rating):
+        r=requests.get(self.url+rating,headers=self.headers)        
         self.mpJson=r.json()
         return self.mpJson
     #save json on disk
     def saveOnDisk(self,rating):
         with open("public/api/loans/marketplace_rating__eq="+rating+".json", "w") as outfile:
-            json.dump(self.getMarketplace(), outfile)
+            json.dump(self.getMarketplace(rating), outfile)
         return "marketplace.json was saved"
     #repeat downloading json files file every timer seconds
     def runtimer(self,timer):

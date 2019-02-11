@@ -17,7 +17,9 @@ class App extends Component {
         </header>
         <nav><LoanFilter /></nav>
         <section>
-          <div id="loanAvgResult"></div>
+          <div class="big">
+            <span id="loanAvgResult">0</span><span>,- CZK</span>
+          </div>
         </section>
         <footer className="body">
         <div id="debbuger"></div>

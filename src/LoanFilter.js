@@ -22,35 +22,57 @@ class LoanFilter extends Component{
         this.filterOn = this.filterOn.bind(this);
     }
     filterOn(e,item){
+        let debug=this.state.debug;
+        let ratingFilter="rating__eq="+item;  //make filter
+        let url=this.state.host+"/loans/marketplace?"+ratingFilter;
+
+        //Change stylo of filter buttons by active rating
         this.state.ratings.forEach(element => { //clear style from filter buttons
             $("#"+element).removeClass("button btnActived").addClass('button');
         });
         $("#"+item).removeClass('button').addClass("button btnActived"); //change style on actived button
-        
-        var ratingFilter="rating__eq="+item;  //make filter
-        this.setState((state, props) => {
-            return {
-                url: this.state.host+"/loans/marketplace?"+ratingFilter,
-                rating:item
-            }
-        }); //set 
-        //this.state.url=this.state.host+"/loans/marketplace?"+ratingFilter;
-        //this.state.rating=item;
-        //var average= countLoanAvg(json);
-        $("#loanAvgResult").html(this.countLoanAvg(item));
-        if(this.state.debug===true){
-            $("#debbuger").html("URL api zonky: <a href='"+this.state.url+"' target='_blank'>"+this.state.url+"</a>"); //show active filter button
+
+        //Debug
+        if(debug){
+            console.log("url of gettin file: ", url);
         }
+
+        //set url state
+        this.setState((state, props) => {
+            return {url: url,rating:item}
+        });
+
+        this.componentDidMount(item);
+       
         
     }
     componentDidMount(item){
-        let rating=this.state.rating;
+        let debug=this.state.debug;
         //var url='https://api.zonky.cz/loans/marketplace?fields=id,amount,rating&rating__eq=A'; //request pattern
-        var url='api/loans/marketplace_rating__eq='+item+'.json';
-        if (typeof rating !== 'undefined' && rating !== null && rating !=="") {
-            $.getJSON(url, function(data) {
-                console.log(data);
-            });
+        let url='/api/loans/marketplace_rating__eq='+item+'.json'; //nastavit testy existence ciloveho souboru
+        
+        //Fetch json file
+        if (typeof item !== 'undefined' && item !== null && item !=="") {
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({data});
+
+                //Debug object json
+                if(debug===true){
+                    console.log("Getted object: ",this.state.data);
+                }
+                
+                //Count average, add dot thousand separator and change on website
+                let avg=Math.floor(this.countLoanAvg(item)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+                $("#loanAvgResult").html(avg);
+            })
+            /*$.getJSON(url, function(data) {
+                //Debug
+                if(debug===true){
+                    console.log("Getted object: ",data)   
+                }   
+            });*/
         } 
     }
     getJsonData(item){
@@ -58,18 +80,21 @@ class LoanFilter extends Component{
     }
     //Count average of array
     countLoanAvg(item) {
-        let sum, avg = 0;
-        var jsonFile=this.getJsonData(item);
-        
-        console.log(jsonFile);
-        var arr=[1,43,5];
-        // dividing by 0 will return Infinity
-        // arr must contain at least 1 element to use reduce
-        if (arr.length)
-        {
-            sum = arr.reduce(function(a, b) { return a + b; });
-            avg = Math.floor(sum / arr.length);
+        let sum=0, avg = 0;
+        let data=this.state.data;
+        //this.getJsonData(item);
+        for (var i in this.state.data){
+            sum+=data[i].amount;
         }
+        avg=sum/data.length;
+
+        //debug sumar,amount,average
+        if(this.state.debug){
+            console.log("Sumar loans: ",sum);
+            console.log("Loans amount: ",data.length);
+            console.log("Average amount: ",avg);
+        }
+
         return avg
     }
 

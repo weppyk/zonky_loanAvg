@@ -3,6 +3,9 @@
   "version": "0.4.0",
   "private": false,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.14",
+    "@fortawesome/free-solid-svg-icons": "^5.7.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "babel-preset-latest": "^6.24.1",
     "bootstrap": "^4.2.1",
     "jquery": "^3.3.1",

@@ -4,6 +4,12 @@ import './App.css';
 //import Connector from './Connector';
 import LoanFilter from './LoanFilter';
 
+//import { library } from '@fortawesome/fontawesome-svg-core'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faIgloo } from '@fortawesome/free-solid-svg-icons'
+
+//library.add(faIgloo);
+
 
 class App extends Component {
   render() {
@@ -17,9 +23,10 @@ class App extends Component {
         </header>
         <nav><LoanFilter /></nav>
         <section>
-          <div class="big">
+          <div className="big">
             <span id="loanAvgResult">0</span><span>,- CZK</span>
           </div>
+          <div id="loadingStatus"></div>
         </section>
         <footer className="body">
         <div id="debbuger"></div>

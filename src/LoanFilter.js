@@ -26,22 +26,28 @@ class LoanFilter extends Component{
         
     }
     addThousandSeparator = (stringNumber,separator)=> stringNumber.replace(/\B(?=(\d{3})+(?!\d))/g, separator); //add thousand separator to string number
+    
+    //if new process is runing and old simultaneously, stop old process
+    stopPreviousProcess = (rating)=>{
+        if(rating!==this.state.rating){ //prevent to show data from another fetch
+            return process.abort();
+        }
+    }
+    filterOn(e,rating){
+        //e.preventDefault();
+        //e.stopPropagation();
 
-    filterOn(e,item){
-        e.preventDefault();
-        e.stopPropagation();
-        //console.log(this.state.ratingAverages[item]);
-        $("#loanAvgResult").html(this.state.ratingAverages[item].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")); //show local saved Average before getting data
-        $("#loadingStatus").html("loading..."); //show loading...
+        $("#loanAvgResult").html(this.state.ratingAverages[rating].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")); //show local saved Average before getting data
+        $("#loadingStatus").html("aktualizují se data..."); //show status...
         let debug=this.state.debug;
-        let ratingFilter="rating__eq="+item;  //make filter
+        let ratingFilter="rating__eq="+rating;  //make filter
         let url=this.state.host+"/loans/marketplace?"+ratingFilter;
 
-        //Change stylo of filter buttons by active rating
+        //Change style of filter buttons by active rating
         this.state.ratings.forEach(element => { //clear style from filter buttons
             $("#"+element).removeClass("button btnActived").addClass('button');
         });
-        $("#"+item).removeClass('button').addClass("button btnActived"); //change style on actived button
+        $("#"+rating).removeClass('button').addClass("button btnActived"); //change style on actived button
 
         //Debug
         if(debug){
@@ -50,13 +56,13 @@ class LoanFilter extends Component{
 
         //set url state
         this.setState((state, props) => {
-            return {url: url,rating:item}
+            return {url: url,rating:rating}
         });
-        this.getJsonData(item);
+        this.getMarketplace(rating);
        
         
     }
-
+    //get local data - not actualized for quick show // actualization works on click to button
     componentDidMount(item){
         let debug=this.state.debug;
 
@@ -72,36 +78,10 @@ class LoanFilter extends Component{
             }
         })
     }
-    getJsonData(rating){
-        let debug=this.state.debug;
-        //let proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-        //var targetUrl = 'http://catfacts-api.appspot.com/api/facts?number=99';
-        //var targetUrl = 'https://api.zonky.cz/loans/marketplace';
-        //var targetUrl = 'http://127.0.0.1:3003/loans/marketplace';
-        /*
-        fetch(proxyUrl + targetUrl,{
-            method:"HEAD",
-            headers:{
-            //"Content-Type": "application/json",
-            "User-Agent":"zonky_loanAvg/0.3.0 (https://github.com/weppyk/zonky_loanAvg)"
-        },credentials:"same-origin"
-        })
-        .then(blob => blob.json())
-        .then(data => {
-            console.log(data);
-            console.table(data);
-            document.querySelector("pre").innerHTML = JSON.stringify(data, null, 2);
-            return data;
-        })
-        .catch(e => {
-            console.log(e);
-            return e;
-        });*/
-
-        //var url='https://api.zonky.cz/loans/marketplace?fields=id,amount,rating&rating__eq=A'; //request pattern
-        //let url='/api/loans/marketplace_rating__eq='+item+'.json'; //nastavit testy existence ciloveho souboru //local
-        //let url=host+'/loans/marketplace?rating__eq='+item; //nastavit testy existence ciloveho souboru
+    getMarketplace(rating){
         
+        let debug=this.state.debug;
+       
         //Fetch json file
         let targetUrl = this.state.host+'/loans/marketplace?fields=id,amount&rating__eq='+rating
         //if (typeof rating !== 'undefined' && rating !== null && rating !=="") {
@@ -110,6 +90,7 @@ class LoanFilter extends Component{
         fetch(targetUrl)
         .then(response => response.json())
         .then(marketplace => {
+            this.stopPreviousProcess(rating); //aborted old same process if running
             this.setState({marketplace});
             
             //Debug object json
@@ -122,9 +103,13 @@ class LoanFilter extends Component{
             ratingAverages[rating]=average; //save average to json
             this.setState({ratingAverages}); //save json to global this
             average=this.addThousandSeparator(average,'.');
+            if(debug){
+                console.log("Running rating process: "+rating+", Actual process: "+this.state.rating+" - This have to be the same.");
+            }
             $("#loanAvgResult").html(average);
             $("#loadingStatus").html("");
         }) 
+        //show error
         .catch(error => {
             console.log(error);
             if(error.message==="Failed to fetch"){
@@ -141,15 +126,16 @@ class LoanFilter extends Component{
     countLoanAvg(item) {
         let sum=0, average = 0;
         let marketplace=this.state.marketplace;
-        var i=0;
+        
 
         //count sum and average from marketplace.amount
+        var i=0;
         do {
             sum+=marketplace[i].amount;
             i++;
         } while (i<marketplace.length);
 
-        average=sum/marketplace.length;
+        average=sum/marketplace.length; //count average
 
         //debug sumar,amount,average
         if(this.state.debug){
@@ -163,13 +149,13 @@ class LoanFilter extends Component{
     render() {
         return(
             <div>
+                <span>Rating:</span>
                 <ul className="filter">
                     {this.state.ratings.map(item => (
                         <li id={item} key={item} className="button" onClick={((e) => this.filterOn(e,item))}>{item}</li>
                     ))}
                </ul>
             </div>
-
         )
     }
 }

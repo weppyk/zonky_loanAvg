@@ -21,8 +21,11 @@ class App extends Component {
           </div>
           {/*<Connector />*/}
         </header>
-        <nav><LoanFilter /></nav>
-        <section>
+        <nav>
+          <h1>Průměr půjček dle ratingu</h1>
+          <LoanFilter />
+          </nav>
+        <section className="loanAverageResult">
           <div className="big">
             <span id="loanAvgResult">0</span><span>,- CZK</span>
           </div>

@@ -31,21 +31,22 @@
 .App-link {
   color: #61dafb;
 }
-nav { height: 80px;}
+
 .button {
   font-size: 1.2em;
   color: #e75637;
   list-style-type: none;
   background-color:#ffffff;
   padding: 10px;
-  margin: 2px;
+  margin: 3px;
   position: relative;
   display: block;
   float: left;
-  border: #e65637 solid 1px;
+  border: #e65637 solid 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  box-shadow: 0.2rem 0.2rem 0 0 rgba(0,0,0,.15);
 }
 .button:hover{
   color: white;
@@ -56,9 +57,28 @@ nav { height: 80px;}
   color: white;
   background-color: #e75637;
   cursor: pointer;
+  box-shadow: none;
+  left:2px;
+  top:2px;
 }
 .big {
   font-size: 4em;
+}
+.filter{
+  display: inline-block;
+  vertical-align: middle
+}
+.loanAverageResult{
+  background-color: #ffffff;
+  padding: 30px;
+  padding-bottom: 10px
+}
+#loadingStatus{
+  color: #555555;
+  min-height: 20px;
+}
+h1{
+  font-size: 3em
 }
 
 /*@keyframes App-logo-spin {

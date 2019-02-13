@@ -13,7 +13,8 @@ RUN apt-get update
 RUN apt-get install -y curl python3 git-core
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
-#RUN apt-get install -y npm
 
+#Clone Repository from git
 RUN git clone  https://github.com/weppyk/zonky_loanAvg.git app
 RUN cd app/ && npm install
+#CMD nohup npm start & /app/flaskserver/bin/python3 /app/flaskserver/flaskserver.py

@@ -2,17 +2,22 @@
 
 This app will count the average value of Zonky loans by filtering of rating
 
-### Install
+### Clone repository
+Copy this project to your local dir:
+`$ git clone https://github.com/weppyk/zonky_loanAvg.git <dir>`
 
+### Install dependencies
 
-Copy this project to your PC by code:
-`git clone https://github.com/weppyk/zonky_loanAvg.git <dir>`
+Go in to app directory and run
+`$ npm install`
 
-than install node modules and dependencies to main directory of this app:
-`npm install`
+### Run flask server and app
+You need to open 2 terminals. 
 
-Install python3 and run ZonkyDownloader.py from main directory: `python3 ZonkyDownloader.py` - this will download json api files to directory API every 6 minutes
+1. In first terminal start flask server from your app root directory: <br />
+`$ chmod 554 startflask` - this makes file executable. <br />
+`$ startflask`
 
-finaly run app:
-`npm start`
+2. in second terminal run app
+  `$ npm start`
 

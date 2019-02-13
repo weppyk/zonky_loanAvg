@@ -1,0 +1,3 @@
+#!/bin/bash  
+
+./flaskserver/bin/python3 ./flaskserver/flaskserver.py

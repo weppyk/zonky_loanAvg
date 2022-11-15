@@ -1,15 +1,6 @@
-import React, { Component } from 'react';
-//import logo from './zonky.png';
-import './App.css';
-//import Connector from './Connector';
-import LoanFilter from './LoanFilter';
-
-//import { library } from '@fortawesome/fontawesome-svg-core'
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//import { faIgloo } from '@fortawesome/free-solid-svg-icons'
-
-//library.add(faIgloo);
-
+import React, { Component } from "react";
+import "./App.css";
+import LoanFilter from "./LoanFilter";
 
 class App extends Component {
   render() {
@@ -19,24 +10,21 @@ class App extends Component {
           <div className="crop">
             <img src="logos.png" className="App-logo" alt="logo"></img>
           </div>
-          {/*<Connector />*/}
         </header>
         <nav>
           <h1>Průměr půjček dle ratingu</h1>
           <LoanFilter />
-          </nav>
+        </nav>
         <section className="loanAverageResult">
           <div className="big">
-            <span id="loanAvgResult">0</span><span>,- CZK</span>
+            <span id="loanAvgResult">0</span>
+            <span>,- CZK</span>
           </div>
           <div id="loadingStatus"></div>
         </section>
         <footer className="body">
-        <div id="debbuger"></div>
+          <div id="debbuger"></div>
         </footer>
-        
-        
-        
       </div>
     );
   }

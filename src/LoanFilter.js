@@ -22,7 +22,6 @@ class LoanFilter extends Component{
             ratingAverages:{}
         }
         this.filterOn = this.filterOn.bind(this);
-        //this.addThousandSeparator=this.addThousandSeparator.bind(this);
         
     }
     addThousandSeparator = (stringNumber,separator)=> stringNumber.replace(/\B(?=(\d{3})+(?!\d))/g, separator); //add thousand separator to string number
@@ -34,9 +33,6 @@ class LoanFilter extends Component{
         }
     }
     filterOn(e,rating){
-        //e.preventDefault();
-        //e.stopPropagation();
-
         $("#loanAvgResult").html(this.state.ratingAverages[rating].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")); //show local saved Average before getting data
         $("#loadingStatus").html("aktualizují se data..."); //show status...
         let debug=this.state.debug;
@@ -117,16 +113,13 @@ class LoanFilter extends Component{
                $("#loadingStatus").html("Zdroj je nedostupný, nelze aktualizovat data. Pravděpodobně neběží flaskServer.");
             }
             return error;
-            
         });              
-       //} 
     }
 
     //Count average of array
     countLoanAvg(item) {
         let sum=0, average = 0;
         let marketplace=this.state.marketplace;
-        
 
         //count sum and average from marketplace.amount
         var i=0;
